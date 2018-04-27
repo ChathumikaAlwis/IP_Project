@@ -10,7 +10,12 @@ import com.sun.corba.se.spi.protocol.RequestDispatcherDefault;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -69,11 +74,25 @@ public class userServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
        throws ServletException, IOException {
         String status;
-        String username;
-        String password;
+        String username; String password;
+        int tele; String fname; String lname; String addr; String dob; String NIC;  String gender;String email;String llogin;
+        String rdate;
         
         username = request.getParameter("username");
         password = request.getParameter("password");
+        tele =  Integer.parseInt(request.getParameter("tele"));
+        fname = request.getParameter("fname");
+        lname = request.getParameter("lname");
+        addr = request.getParameter("address");
+        NIC = request.getParameter("NIC");
+        dob = request.getParameter("DOB");
+        System.out.print(dob);
+        rdate = LocalDate.now().toString();
+        gender = request.getParameter("gender");
+        email = request.getParameter("email");
+        llogin = LocalDateTime.now().toString();
+        
+        
         
         //Encrtpt password
         EncryptPw encrypt = new EncryptPw();
@@ -87,6 +106,18 @@ public class userServlet extends HttpServlet {
         User u = new User();
         u.setUsername(username);
         u.setPassword(password);
+        u.setFirstname(fname);
+        u.setLastname(lname);
+        u.setAddr(addr);
+        u.setDob(dob);
+        u.setTele(tele);
+        u.setRegDate(rdate);
+        u.setGender(gender);
+        u.setNIC(NIC);
+        u.setEmail(email);
+        u.setLastLogin(llogin);
+        
+        
         try {
              status = u.addUser();
              if(Integer.parseInt(status)>0){
@@ -98,7 +129,7 @@ public class userServlet extends HttpServlet {
              }
              else if(Integer.parseInt(status)==-153)
              {
-              request.setAttribute("status", "An account for this email already exists!Use a different email!" );
+              request.setAttribute("status", "Username already exists!Use a different username!" );
               RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
             rd.forward(request, response);
              }

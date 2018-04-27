@@ -110,7 +110,7 @@ public final class header_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                ");
 
 DbConnection conn = new DbConnection();
-String url="jdbc:mysql://localhost/test";
+//String url="jdbc:mysql://localhost/test";
 
       out.write('\n');
  
@@ -118,7 +118,7 @@ String query="select catId,catname from foodcat";
 //Connection conn=DriverManager.getConnection(url,username,password);
 //Statement stmt=conn.createStatement();
 //ResultSet rs=stmt.executeQuery(query);
-ResultSet rs = conn.executeSelect(url, query);
+ResultSet rs = conn.executeSelect(query);
 while(rs.next())
 {
 

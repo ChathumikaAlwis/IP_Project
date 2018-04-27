@@ -4,12 +4,18 @@
     Author     : Chath
 --%>
 
+<%@page import="mypckg.Img"%>
+<%@page import="java.io.OutputStream"%>
+<%@page import="java.io.FileOutputStream"%>
+<%@page import="java.io.InputStream"%>
+<%@page import="java.sql.Blob"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="mypckg.DbConnection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -18,18 +24,121 @@
     <%@include file="header.jsp" %>
     </head>
     <body >
-     <div style="margin-top: 4%;height:100%">
+        <div class="container-fluid" style="margin-top: 4%">
+    
+    
         <%
         String pId = request.getParameter("pid"); 
         DbConnection con = new DbConnection(); 
-        String sql = "SELECT catname FROM foodcat WHERE catId="+ pId +";";
-        ResultSet r = con.executeSelect("jdbc:mysql://localhost/test", sql);
+        String sql = "SELECT catName FROM menucat WHERE catId="+ pId +";";
+        ResultSet r = con.executeSelect(sql);
         r.next();
         String pname=r.getString(1);
+        Img i=null;
+        String sq = "SELECT itemId,itemName,img,price,availability FROM menuitem WHERE catId="+ pId +";";
+        ResultSet rs1 = con.executeSelect(sq);
+        
+        
         %>
-        <h1><%= pname %></h1>
-    </div>
-        <%@include file="footer.jsp" %>
-    </body>
+        
+        <h1><%= pname %></h1>        
     
+        <div class="row">
+        <%
+        while(rs1.next()){%>
+        
+<%      int itemId = rs1.getInt(1);
+        String itemName = rs1.getString(2);
+        Blob img = rs1.getBlob(3);
+        double price = rs1.getDouble(4); int availabilty = rs1.getInt(5);
+        
+        
+        String sq2 = "SELECT count(cId) FROM cart WHERE itemId="+ itemId +";";
+        ResultSet rs2 = con.executeSelect(sq2);
+        rs2.next();
+        int it = rs2.getInt(1);
+        
+        
+        
+        
+        i =new Img();
+        i.getImg(itemName,img);
+        String inameedit = itemName.replaceAll("\\s+","");%>
+        <div class="col-xs-3" style="border:#000000 3px solid;padding-bottom: 2%"><form name="product" action="" method="POST">
+            <img style="" src="images/fooditems/<%= inameedit %>.jpg" width="100%" height="100%">
+            <div ><%=itemName%></div><div><%= price%></div>  
+            <%if(it<1){%>
+            <input type="submit" class="btn-success" value="ADD" id="addbtn" name="addbtn" onclick="this.style.backgroundColor='black';clicke();" /><%}
+else{%>
+<input type="submit" value="Added" class="btn-default" id="addbtn" name="addedbtn" disabled="true" />
+<%}
+            %>
+            <input type="hidden" name="itemid" value="<%= itemId %>">
+            <input type="hidden" name="k" value="0">
+            </form></div>
+            
+    <%  }
+        i.close();
+        con.close();
+        //catch(Exception e){System.out.println(e.getMessage())
+          //   ;}
+
+   
+    %>
+                 
+
+       </div>
+        
+        
+        
+      
+     
+     
+    
+    
+</div>
+       
+        <jsp:include page="footer.jsp"/>  
+        
+        
+        
+        
+            <script type="text/javascript">
+            function clicke(){
+               
+    //    document.getElementById("addbtn").disbled = true;
+                    /*     int key= Integer.parseInt(request.getParameter("k"));
+                    System.out.println(item+"ye"+k);
+                    Cookie c = new Cookie("item"+key,item);
+                    c.setMaxAge(24 * 60 * 60);
+                    response.addCookie(c);
+                    k++;*/
+            
+                    <%
+        if(session.getAttribute("username")==null){response.sendRedirect("login.jsp");}
+        try{
+            String unn = (String)session.getAttribute("username");
+        String sq33 = "SELECT cusId FROM customer WHERE username='"+ unn  +"';";
+        
+        ResultSet rs33 = con.executeSelect(sq33);
+        rs33.next();
+        String userId = rs33.getString(1);
+        System.out.println(userId);
+ 
+        
+                           String item =null;
+                    item =request.getParameter("itemid");                    
+                    String s = "INSERT INTO cart(userId,itemId) VALUES("+userId+","+item+");";
+                    String rest = con.execInsert(s);
+                    System.out.println(rest+"res");
+        //response.sendRedirect("product.jsp");
+        }
+        catch(Exception e){System.out.println(e.getLocalizedMessage()+"asd");}
+ 
+                    %>
+          location.refresh(true); alert('ds');                 };
+
+          
+          </script>
+    </body>    
 </html>

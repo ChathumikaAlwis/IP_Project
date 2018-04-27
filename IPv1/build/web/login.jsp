@@ -15,8 +15,8 @@ and open the template in the editor.
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
    <script> 
     $(function(){
-      $("#includedHeader").load("header.html");
-      $("#includedFooter").load("footer.html");
+      $("#includedHeader").load("header.jsp");
+      $("#includedFooter").load("footer.jsp");
     });
     </script>
    

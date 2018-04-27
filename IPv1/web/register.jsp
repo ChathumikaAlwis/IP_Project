@@ -40,38 +40,49 @@
 						<div class="row" style="color:#fff">
 							<div class="col-sm-6 form-group">
 								<label>First Name</label>
-								<input type="text"  placeholder="Enter First Name Here.." class="form-control">
+								<input type="text" name="fname"  placeholder="Enter First Name Here.." class="form-control">
 							</div>
 							<div class="col-sm-6 form-group">
 								<label>Last Name</label>
-								<input type="text"  placeholder="Enter Last Name Here.." class="form-control">
+								<input name="lname" type="text"  placeholder="Enter Last Name Here.." class="form-control">
 							</div>
 						</div>					
 						<div class="form-group" style="color:#fff">
 							<label>Address</label>
-							<textarea placeholder="Enter Address Here.." rows="3" class="form-control"></textarea>
+							<textarea name="address" placeholder="Enter Address Here.." rows="3" class="form-control"></textarea>
+						</div>
+                                            <div class="row" style="color:#fff">
+							<div class="col-sm-6 form-group" >
+								<label>DOB</label>
+								<input type="date" name="DOB" style="color:#000000">
+							</div>
+							<div class="col-sm-6 form-group">
+								<label>Gender</label>
+								<input name="gender" type="text"  placeholder="Gender" class="form-control">
+							</div>
 						</div>	
 						<div class="row" style="color:#fff">
 							<div class="col-sm-6 form-group">
 								<label>NIC</label>
-								<input type="text" placeholder="Enter National ID Here.." class="form-control">
+								<input type="text" name="NIC" placeholder="Enter National ID Here.." class="form-control">
 							</div>		
 							<div class="col-sm-6 form-group">
 								<label>Contact</label>
-								<input type="text" placeholder="Enter Contact Number Here.." class="form-control">
+								<input type="text" name="tele" placeholder="Enter Contact Number Here.." class="form-control">
 							</div>	
 						</div>						
 					<div class="form-group" style="color:#fff">
 						<label>UserName</label>
-						<input type="text" placeholder="Enter UserName Here.." class="form-control">
-					</div>		
-					<div class="form-group" style="color:#fff">
-						<label>Email Address</label>
-						<input name="username" type="text" placeholder="Enter Email Address Here.." class="form-control">
+						<input name="username" type="text" placeholder="Enter UserName Here.." class="form-control">
                                                 <% String status = (String)request.getAttribute("status");
                                                 if(status!=null){
                                                 %> 
                                                 <p class="text-danger" ><%= status %></p>  <%}%>
+					</div>		
+					<div class="form-group" style="color:#fff">
+						<label>Email Address</label>
+						<input name="email" type="text" placeholder="Enter Email Address Here.." class="form-control">
+                                                
 					</div>	
 					<div class="form-group" style="color:#fff">
 						<label>Password</label>
@@ -79,7 +90,7 @@
 					</div>
                                             <div class="form-group" style="color:#fff">
 						<label>Re-Enter Password</label>
-						<input type="text" placeholder="Re-Enter Password Here.." class="form-control">
+						<input name="confirmpass" id="confirmpass" type="text" placeholder="Re-Enter Password Here.." class="form-control">
 					</div
                                         
 					<br/>	

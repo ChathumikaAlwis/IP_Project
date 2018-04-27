@@ -86,6 +86,7 @@ public class loginServlet extends HttpServlet {
             
             if(r>0)
             {
+                u.updateUser(username);
                 //start session
                  HttpSession s = request.getSession(true);
                  s.setAttribute("username", username);

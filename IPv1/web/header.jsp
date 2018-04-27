@@ -64,15 +64,15 @@
           
                 <%
 DbConnection conn = new DbConnection();
-String url="jdbc:mysql://localhost/test";
+//String url="jdbc:mysql://localhost/test";
 %><%-- String username="root";
 String password="1234";--%>
 <% 
-String query="select catId,catname from foodcat";
+String query="select catId,catName from menucat";
 //Connection conn=DriverManager.getConnection(url,username,password);
 //Statement stmt=conn.createStatement();
 //ResultSet rs=stmt.executeQuery(query);
-ResultSet rs = conn.executeSelect(url, query);
+ResultSet rs = conn.executeSelect(query);
 while(rs.next())
 {
 %>
@@ -89,11 +89,12 @@ conn.close();
         <li><a href="homepage.jsp#contactdiv" style="color:#fff">CONTACT US</a></li>
       </ul>
         <ul class="nav navbar-nav navbar-right">
-        <li><a href="#about" style="color:#fff"><i class="glyphicon glyphicon-shopping-cart"></i>CART</a></li>
+
         <% if(session.getAttribute("username")==null) {%>
         <li><a href="register.jsp" style="color:#fff">REGISTER</a></li>
         <li><a href="login.jsp" style="color:#fff">LOGIN</a></li>  <%}
         else{   %>
+        <li><a href="order.jsp" style="color:#fff"><i class="glyphicon glyphicon-shopping-cart"></i>CART</a></li>
         <li><a href="logout.jsp" style="color:#fff"><%= session.getAttribute("username") %></a></li>  <%
         } 
         %>
