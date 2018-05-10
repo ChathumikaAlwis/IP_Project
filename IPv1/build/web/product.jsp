@@ -30,6 +30,7 @@
         <%
         String pId = request.getParameter("pid"); 
         DbConnection con = new DbConnection(); 
+        
         String sql = "SELECT catName FROM menucat WHERE catId="+ pId +";";
         ResultSet r = con.executeSelect(sql);
         r.next();
@@ -37,7 +38,7 @@
         Img i=null;
         String sq = "SELECT itemId,itemName,img,price,availability FROM menuitem WHERE catId="+ pId +";";
         ResultSet rs1 = con.executeSelect(sq);
-        
+        String userId1="";int it;
         
         %>
         
@@ -45,6 +46,14 @@
     
         <div class="row">
         <%
+            
+        if(session.getAttribute("username")!=null){
+        String unn1 = (String)session.getAttribute("username");
+        String sq333 = "SELECT cusId FROM customer WHERE username='"+ unn1  +"';";
+        ResultSet rs333 = con.executeSelect(sq333);
+        rs333.next();
+        userId1 = rs333.getString(1);
+            }
         while(rs1.next()){%>
         
 <%      int itemId = rs1.getInt(1);
@@ -53,11 +62,18 @@
         double price = rs1.getDouble(4); int availabilty = rs1.getInt(5);
         
         
+        if(session.getAttribute("username")!=null){
+        String sq2 = "SELECT count(cId) FROM cart WHERE itemId="+ itemId +" AND userId="+userId1+";";
+        ResultSet rs2 = con.executeSelect(sq2);
+        rs2.next();
+        it = rs2.getInt(1);
+        }
+        else{
         String sq2 = "SELECT count(cId) FROM cart WHERE itemId="+ itemId +";";
         ResultSet rs2 = con.executeSelect(sq2);
         rs2.next();
-        int it = rs2.getInt(1);
-        
+        it = rs2.getInt(1);
+        }
         
         
         
@@ -67,7 +83,10 @@
         <div class="col-xs-3" style="border:#000000 3px solid;padding-bottom: 2%"><form name="product" action="" method="POST">
             <img style="" src="images/fooditems/<%= inameedit %>.jpg" width="100%" height="100%">
             <div ><%=itemName%></div><div><%= price%></div>  
-            <%if(it<1){%>
+        <%if(session.getAttribute("username")==null){%>
+        <a href="login.jsp" style="color: black">Login</a>
+        <% }
+          else if(it<1){%>
             <input type="submit" class="btn-success" value="ADD" id="addbtn" name="addbtn" onclick="this.style.backgroundColor='black';clicke();" /><%}
 else{%>
 <input type="submit" value="Added" class="btn-default" id="addbtn" name="addedbtn" disabled="true" />
@@ -115,7 +134,7 @@ else{%>
                     k++;*/
             
                     <%
-        if(session.getAttribute("username")==null){response.sendRedirect("login.jsp");}
+        
         try{
             String unn = (String)session.getAttribute("username");
         String sq33 = "SELECT cusId FROM customer WHERE username='"+ unn  +"';";
@@ -136,7 +155,7 @@ else{%>
         catch(Exception e){System.out.println(e.getLocalizedMessage()+"asd");}
  
                     %>
-          location.refresh(true); alert('ds');                 };
+                      };
 
           
           </script>

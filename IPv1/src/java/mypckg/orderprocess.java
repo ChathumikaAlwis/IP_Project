@@ -7,6 +7,8 @@ package mypckg;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +42,7 @@ public class orderprocess extends HttpServlet {
             out.println("<title>Servlet orderprocess</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet orderprocess at " + request.getContextPath() + "</h1>");
+            out.println("<a href='http://localhost:8080/IPv1/homepage.jsp' >Back to homepage</a>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,12 +72,30 @@ public class orderprocess extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int itemId = (int)request.getAttribute("itemid");
-        int quantity = (int) request.getAttribute("quantity");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+       double total =0,itemprice,itemq;     int i=0;
+        Enumeration paramNames1 = request.getParameterNames();
+        int b = Integer.parseInt(request.getParameter("b"));
         
+        System.out.println(b+"as");
+               while(i<b) {
+                  itemprice =0; itemq=0;
+                  
+                  itemprice = Double.parseDouble(request.getParameter("item"+i+"price"));
+                  itemq = Double.parseDouble(request.getParameter("item"+i+"quantity"));
+                  PrintWriter out = response.getWriter();
+                  total= total+ (itemprice*itemq);
+                  out.print("<p>" + itemprice + "</p>");
+                  //String paramValue = request.getParameter(paramName);
+                  out.println("<p>" + itemq + "</p>");
+                  out.print("<p>" + total + "</p>");
+                  i++;
+                 
+               }
         
+            request.setAttribute("total", total);
+            RequestDispatcher rdconf = request.getRequestDispatcher("orderconfirm.jsp");
+            rdconf.forward(request, response);
     }
 
     /**
@@ -83,9 +103,5 @@ public class orderprocess extends HttpServlet {
      *
      * @return a String containing servlet description
      */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

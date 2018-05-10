@@ -36,11 +36,12 @@
         String sq44 = "SELECT itemId FROM cart WHERE userId="+ userId +";";
         ResultSet rs44 = con.executeSelect(sq44);
         double total=0;%>
-        <form action="orderprocess" method="POST" onsubmit="return confirm('Please confirm payment of LKR <%=total%>');"> 
+        <form name="orderform" action="orderprocess" method="POST"> 
         <table class="table table-dark"  style="width: 100%;height: 300%;overflow-x:auto;">
             
-                <thead><tr><th>Image</th><th>Item Name</th><th>Available</th><th>Price</th><th>Quantity</th><th>Total</th></tr></thead><tbody>
+                <thead><tr><th>Image</th><th>Item Name</th><th>Available</th><th>Price</th><th>Quantity</th><th>Remove</th></tr></thead><tbody>
             <%
+                int b=0;
         while(rs44.next()){ 
                int itemid = rs44.getInt(1);
             String sq55 = "SELECT itemName,img,price,availability,itemId FROM menuitem WHERE itemId='"+ itemid  +"';";
@@ -56,23 +57,29 @@
             int l;%>
         
             <tr >
-                <input type="hidden" name="itemid" value="<%= itemId %>">
+                <input type="hidden" name="item<%=b%>price" value="<%= price %>">
+                
                 <td ><img style="" src="images/fooditems/<%= inameedit %>.jpg" width="50px" height="50px"></td>
                 <td><%= itemName %></td>
                 <td><%= (availabilty>0)?"available":"not available" %></td>
                 <td><%= price %></td>
-            <td><select name="quantity" >
-                <% for(l=0;l<=15;l++){%><option vlaue="<%=l%>"><%=l%></option><%}%>
+                <td><select name="item<%=b%>quantity" >
+                <% for(l=1;l<=15;l++){%><option vlaue="<%=l%>"><%=l%></option><%}%>
             </select></td>
-             </tr>
-
-                <%
-                    //get itemnames for ln30 add q txtbox and delete + clear all
-                    //on quant change cal price for each then cal total?
-                    
-        }%>     </tbody>  </table><input style="float:right;margin-right:5% "  class="btn-success" type = "submit" value = "Continue" name = "contbtn" /> 
+            
+             <td><input style="width: 30px;text-align: center;"  class="btn-danger" value = "X" name = "deletebtn" /> </td>
+             
+            </tr>
+           
+                <% ++b;
                 
-        <input type="submit" value="btn" name="bbtn" onclick="this.disabled='true';"/>
+        }%><input type="hidden" name="b" value="<%=b%>">
+         <tr>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+        </tbody>  </table><input style="float:right;margin-right:5% "  class="btn-success" type = "submit" value = "Continue" name = "contbtn" /> 
+                
+        
         </form><%
         
 
@@ -80,6 +87,6 @@
 
 }
         %></div>
-                
+        
     </body>
 </html>

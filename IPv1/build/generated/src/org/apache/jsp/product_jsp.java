@@ -72,6 +72,7 @@ public final class product_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
+      out.write("\n");
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
       out.write("        <title>JSP Page</title>\n");
       out.write("            <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\">\n");
@@ -209,6 +210,7 @@ conn.close();
 
         String pId = request.getParameter("pid"); 
         DbConnection con = new DbConnection(); 
+        
         String sql = "SELECT catName FROM menucat WHERE catId="+ pId +";";
         ResultSet r = con.executeSelect(sql);
         r.next();
@@ -216,7 +218,7 @@ conn.close();
         Img i=null;
         String sq = "SELECT itemId,itemName,img,price,availability FROM menuitem WHERE catId="+ pId +";";
         ResultSet rs1 = con.executeSelect(sq);
-        
+        String userId1="";int it;
         
         
       out.write("\n");
@@ -228,6 +230,14 @@ conn.close();
       out.write("        <div class=\"row\">\n");
       out.write("        ");
 
+            
+        if(session.getAttribute("username")!=null){
+        String unn1 = (String)session.getAttribute("username");
+        String sq333 = "SELECT cusId FROM customer WHERE username='"+ unn1  +"';";
+        ResultSet rs333 = con.executeSelect(sq333);
+        rs333.next();
+        userId1 = rs333.getString(1);
+            }
         while(rs1.next()){
       out.write("\n");
       out.write("        \n");
@@ -237,11 +247,18 @@ conn.close();
         double price = rs1.getDouble(4); int availabilty = rs1.getInt(5);
         
         
+        if(session.getAttribute("username")!=null){
+        String sq2 = "SELECT count(cId) FROM cart WHERE itemId="+ itemId +" AND userId="+userId1+";";
+        ResultSet rs2 = con.executeSelect(sq2);
+        rs2.next();
+        it = rs2.getInt(1);
+        }
+        else{
         String sq2 = "SELECT count(cId) FROM cart WHERE itemId="+ itemId +";";
         ResultSet rs2 = con.executeSelect(sq2);
         rs2.next();
-        int it = rs2.getInt(1);
-        
+        it = rs2.getInt(1);
+        }
         
         
         
@@ -258,14 +275,19 @@ conn.close();
       out.write("</div><div>");
       out.print( price);
       out.write("</div>  \n");
-      out.write("            ");
-if(it<1){
+      out.write("        ");
+if(session.getAttribute("username")==null){
       out.write("\n");
-      out.write("            <input type=\"submit\" class=\"btn-success\" value=\"ADD\" id=\"addbtn\" name=\"addbtn\" onclick=\"clicke();\" />");
+      out.write("        <a href=\"login.jsp\">Login</a>\n");
+      out.write("        ");
+ }
+          else if(it<1){
+      out.write("\n");
+      out.write("            <input type=\"submit\" class=\"btn-success\" value=\"ADD\" id=\"addbtn\" name=\"addbtn\" onclick=\"this.style.backgroundColor='black';clicke();\" />");
 }
 else{
       out.write("\n");
-      out.write("<input type=\"submit\" value=\"Added\" class=\"btn-default\" id=\"addbtn\" name=\"addbtn\" disabled=\"true\" onclick=\"clicke(); />\n");
+      out.write("<input type=\"submit\" value=\"Added\" class=\"btn-default\" id=\"addbtn\" name=\"addedbtn\" disabled=\"true\" />\n");
 }
             
       out.write("\n");
@@ -286,20 +308,39 @@ else{
     
       out.write("\n");
       out.write("                 \n");
-      out.write("    <script>\n");
+      out.write("\n");
+      out.write("       </div>\n");
+      out.write("        \n");
+      out.write("        \n");
+      out.write("        \n");
+      out.write("      \n");
+      out.write("     \n");
+      out.write("     \n");
+      out.write("    \n");
+      out.write("    \n");
+      out.write("</div>\n");
+      out.write("       \n");
+      out.write("        ");
+      org.apache.jasper.runtime.JspRuntimeLibrary.include(request, response, "footer.jsp", out, false);
+      out.write("  \n");
+      out.write("        \n");
+      out.write("        \n");
+      out.write("        \n");
+      out.write("        \n");
+      out.write("            <script type=\"text/javascript\">\n");
       out.write("            function clicke(){\n");
-      out.write("                document.getElementById(\"addbtn\").disabled = true;\n");
-      out.write("                //    document.getElementById(\"addbtn\").disbled = true;\n");
+      out.write("               \n");
+      out.write("    //    document.getElementById(\"addbtn\").disbled = true;\n");
       out.write("                    /*     int key= Integer.parseInt(request.getParameter(\"k\"));\n");
       out.write("                    System.out.println(item+\"ye\"+k);\n");
       out.write("                    Cookie c = new Cookie(\"item\"+key,item);\n");
       out.write("                    c.setMaxAge(24 * 60 * 60);\n");
       out.write("                    response.addCookie(c);\n");
       out.write("                    k++;*/\n");
-      out.write("            alert('ds');        \n");
+      out.write("            \n");
       out.write("                    ");
 
-        if(session.getAttribute("username")==null){response.sendRedirect("login.jsp");}
+        
         try{
             String unn = (String)session.getAttribute("username");
         String sq33 = "SELECT cusId FROM customer WHERE username='"+ unn  +"';";
@@ -315,30 +356,16 @@ else{
                     String s = "INSERT INTO cart(userId,itemId) VALUES("+userId+","+item+");";
                     String rest = con.execInsert(s);
                     System.out.println(rest+"res");
-        
+        //response.sendRedirect("product.jsp");
         }
         catch(Exception e){System.out.println(e.getLocalizedMessage()+"asd");}
  
                     
       out.write("\n");
-      out.write("                            }\n");
+      out.write("                      };\n");
       out.write("\n");
       out.write("          \n");
       out.write("          </script>\n");
-      out.write("       </div>\n");
-      out.write("        \n");
-      out.write("        \n");
-      out.write("        \n");
-      out.write("      \n");
-      out.write("     \n");
-      out.write("     \n");
-      out.write("    \n");
-      out.write("    \n");
-      out.write("</div>\n");
-      out.write("       \n");
-      out.write("        ");
-      org.apache.jasper.runtime.JspRuntimeLibrary.include(request, response, "footer.jsp", out, false);
-      out.write("  \n");
       out.write("    </body>    \n");
       out.write("</html>\n");
     } catch (Throwable t) {

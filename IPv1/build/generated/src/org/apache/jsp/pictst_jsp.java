@@ -61,7 +61,7 @@ public final class pictst_jsp extends org.apache.jasper.runtime.HttpJspBase
             ResultSet rs = conn.executeSelect(query); 
       out.write("\n");
       out.write("            \n");
-      out.write("            <select name=\"fooditemdd\">");
+      out.write("            <select name=\"catid\">");
 
                 while(rs.next()){
                     //System.out.println(rs.getString(2));
@@ -83,6 +83,10 @@ public final class pictst_jsp extends org.apache.jasper.runtime.HttpJspBase
 
             
       out.write("\n");
+      out.write("            <input type=\"text\" name=\"itemname\" value=\"\" size=\"10\" />\n");
+      out.write("            \n");
+      out.write("            \n");
+      out.write("            <br/><br/>\n");
       out.write("            <input type=\"file\" name=\"pic\"/>\n");
       out.write("        <input type=\"submit\" value=\"submit\" />\n");
       out.write("        </form>\n");
